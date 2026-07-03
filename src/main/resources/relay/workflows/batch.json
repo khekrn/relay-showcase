@@ -1,0 +1,20 @@
+{
+  "name": "batch",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${summary.output}",
+  "start": "items",
+  "states": {
+    "items": {
+      "type": "MAP",
+      "items": "${input.ids}",
+      "concurrency": 2,
+      "next": "summary",
+      "iterator": {
+        "start": "proc",
+        "states": { "proc": { "type": "TASK", "task": "process", "input": { "id": "${item}" }, "end": true } }
+      }
+    },
+    "summary": { "type": "TASK", "task": "handle", "input": { "count": "${len(items.output)}" }, "end": true }
+  }
+}

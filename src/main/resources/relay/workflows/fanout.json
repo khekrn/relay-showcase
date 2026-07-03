@@ -1,0 +1,19 @@
+{
+  "name": "fanout",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${merge.output}",
+  "start": "fork",
+  "states": {
+    "fork": {
+      "type": "PARALLEL",
+      "next": "merge",
+      "branches": [
+        { "start": "w1", "states": { "w1": { "type": "AWAIT", "signal": "go", "end": true } } },
+        { "start": "w2", "states": { "w2": { "type": "AWAIT", "signal": "go", "end": true } } },
+        { "start": "w3", "states": { "w3": { "type": "AWAIT", "signal": "go", "end": true } } }
+      ]
+    },
+    "merge": { "type": "TASK", "task": "handle", "input": { "action": "MERGED" }, "end": true }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "race",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${award.output}",
+  "start": "bid",
+  "states": {
+    "bid": {
+      "type": "PARALLEL",
+      "join": "ANY",
+      "next": "award",
+      "branches": [
+        { "start": "q1", "states": { "q1": { "type": "TASK", "task": "quote", "input": { "provider": "acme" },  "end": true } } },
+        { "start": "q2", "states": { "q2": { "type": "TASK", "task": "quote", "input": { "provider": "globex" }, "end": true } } },
+        { "start": "q3", "states": { "q3": { "type": "TASK", "task": "quote", "input": { "provider": "initech" },"end": true } } }
+      ]
+    },
+    "award": { "type": "TASK", "task": "handle", "input": { "action": "AWARDED" }, "end": true }
+  }
+}

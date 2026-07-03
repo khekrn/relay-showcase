@@ -1,0 +1,11 @@
+{
+  "name": "deadline",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${resume.output}",
+  "start": "wait",
+  "states": {
+    "wait":   { "type": "AWAIT", "signal": "never", "timeout": 500, "next": "resume" },
+    "resume": { "type": "TASK", "task": "handle", "input": { "action": "RESUMED" }, "end": true }
+  }
+}

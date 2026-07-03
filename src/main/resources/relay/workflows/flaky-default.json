@@ -1,0 +1,16 @@
+{
+  "name": "flaky-default",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${ok.output}",
+  "start": "attempt",
+  "states": {
+    "attempt": {
+      "type": "TASK",
+      "task": "flaky",
+      "input": { "job": "default-on" },
+      "next": "ok"
+    },
+    "ok": { "type": "TASK", "task": "handle", "input": { "action": "RECOVERED_BY_DEFAULT" }, "end": true }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "flaky",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${ok.output}",
+  "start": "attempt",
+  "states": {
+    "attempt": {
+      "type": "TASK",
+      "task": "flaky",
+      "input": { "job": "sync-x" },
+      "retry": { "intervalType": "FIXED", "maxRetry": 3, "interval": 20 },
+      "next": "ok"
+    },
+    "ok": { "type": "TASK", "task": "handle", "input": { "action": "RECOVERED" }, "end": true }
+  }
+}

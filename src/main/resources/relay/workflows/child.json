@@ -1,0 +1,10 @@
+{
+  "name": "child",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${work.output}",
+  "start": "work",
+  "states": {
+    "work": { "type": "TASK", "task": "job", "input": { "name": "${input.name}" }, "end": true }
+  }
+}

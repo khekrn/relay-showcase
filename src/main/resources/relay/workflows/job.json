@@ -1,0 +1,11 @@
+{
+  "name": "job",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${finish.output}",
+  "start": "step1",
+  "states": {
+    "step1":  { "type": "TASK", "task": "job", "input": { "name": "${input.name}" }, "next": "finish" },
+    "finish": { "type": "TASK", "task": "handle", "input": { "action": "JOB_DONE" }, "end": true }
+  }
+}

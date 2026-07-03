@@ -1,0 +1,11 @@
+{
+  "name": "distjob",
+  "version": 1,
+  "mode": "ASYNC_DISTRIBUTED",
+  "output": "${finish.output}",
+  "start": "step1",
+  "states": {
+    "step1":  { "type": "TASK", "task": "job", "input": { "name": "${input.name}" }, "next": "finish" },
+    "finish": { "type": "TASK", "task": "handle", "input": { "action": "DIST_DONE" }, "end": true }
+  }
+}

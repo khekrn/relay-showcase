@@ -1,0 +1,21 @@
+{
+  "name": "vote",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${tally.output}",
+  "start": "ballot",
+  "states": {
+    "ballot": {
+      "type": "PARALLEL",
+      "join": "QUORUM",
+      "quorum": 2,
+      "next": "tally",
+      "branches": [
+        { "start": "v1", "states": { "v1": { "type": "TASK", "task": "quote", "input": { "provider": "east" }, "end": true } } },
+        { "start": "v2", "states": { "v2": { "type": "TASK", "task": "quote", "input": { "provider": "west" }, "end": true } } },
+        { "start": "v3", "states": { "v3": { "type": "TASK", "task": "quote", "input": { "provider": "north" },"end": true } } }
+      ]
+    },
+    "tally": { "type": "TASK", "task": "handle", "input": { "action": "QUORUM_REACHED" }, "end": true }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "holdcancel",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${done.output}",
+  "start": "hold",
+  "states": {
+    "hold": { "type": "AWAIT", "signal": "approve", "next": "done" },
+    "done": { "type": "TASK", "task": "handle", "input": { "action": "APPROVED" }, "end": true }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "triage",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${default(page.output, default(ticket.output, ignore.output))}",
+  "start": "decide",
+  "states": {
+    "decide": {
+      "type": "CHOICE",
+      "choices": [
+        { "when": "${input.severity >= 8}", "next": "page" },
+        { "when": "${input.severity >= 4}", "next": "ticket" }
+      ],
+      "default": "ignore"
+    },
+    "page":   { "type": "TASK", "task": "handle", "input": { "action": "PAGE" },   "end": true },
+    "ticket": { "type": "TASK", "task": "handle", "input": { "action": "TICKET" }, "end": true },
+    "ignore": { "type": "TASK", "task": "handle", "input": { "action": "IGNORE" }, "end": true }
+  }
+}

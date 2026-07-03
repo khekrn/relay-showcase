@@ -1,0 +1,12 @@
+{
+  "name": "parent",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${post.output}",
+  "start": "pre",
+  "states": {
+    "pre":  { "type": "TASK", "task": "handle", "input": { "action": "PARENT_PRE" }, "next": "sub" },
+    "sub":  { "type": "SUBWORKFLOW", "workflow": "child", "version": 1, "input": { "name": "nested" }, "next": "post" },
+    "post": { "type": "TASK", "task": "handle", "input": { "action": "PARENT_POST" }, "end": true }
+  }
+}

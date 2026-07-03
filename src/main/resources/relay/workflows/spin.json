@@ -1,0 +1,19 @@
+{
+  "name": "spin",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${finish.output}",
+  "start": "cycle",
+  "states": {
+    "cycle": {
+      "type": "LOOP",
+      "while": "${round.output.again}",
+      "next": "finish",
+      "body": {
+        "start": "round",
+        "states": { "round": { "type": "TASK", "task": "tick", "input": { "n": "${loop.iteration}" }, "end": true } }
+      }
+    },
+    "finish": { "type": "TASK", "task": "handle", "input": { "action": "LOOPED" }, "end": true }
+  }
+}

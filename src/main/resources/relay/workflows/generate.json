@@ -1,0 +1,16 @@
+{
+  "name": "generate",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${plan.output}",
+  "start": "plan",
+  "states": {
+    "plan": {
+      "type": "DYNAMIC",
+      "dynamic": { "kind": "SUBGRAPH" },
+      "input": { "steps": "${input.steps}" },
+      "next": "done"
+    },
+    "done": { "type": "TASK", "task": "handle", "input": { "action": "PLAN_EXECUTED" }, "end": true }
+  }
+}

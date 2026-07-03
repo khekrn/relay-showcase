@@ -1,0 +1,20 @@
+{
+  "name": "saga",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${settle.output}",
+  "start": "underwrite",
+  "states": {
+    "underwrite": {
+      "type": "PARALLEL",
+      "next": "settle",
+      "branches": [
+        { "start": "reserveFunds",
+          "states": { "reserveFunds": { "type": "TASK", "task": "reserve", "input": { "amount": "${input.amount}" }, "compensate": "release", "end": true } } },
+        { "start": "fraudCheck",
+          "states": { "fraudCheck": { "type": "TASK", "task": "boom", "input": { "who": "${input.who}" }, "retry": { "maxRetry": 0 }, "end": true } } }
+      ]
+    },
+    "settle": { "type": "TASK", "task": "handle", "input": { "action": "SETTLED" }, "end": true }
+  }
+}

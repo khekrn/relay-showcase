@@ -1,0 +1,11 @@
+{
+  "name": "poison",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${boom.output}",
+  "start": "boom",
+  "states": {
+    "boom": { "type": "TASK", "task": "boom", "input": { "who": "poison-demo" }, "next": "done" },
+    "done": { "type": "TASK", "task": "handle", "input": { "action": "SURVIVED" }, "end": true }
+  }
+}
