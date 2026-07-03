@@ -1,0 +1,18 @@
+{
+  "name": "batchjob",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${summary.output}",
+  "start": "m",
+  "states": {
+    "m": { "type": "MAP", "items": "${input.ids}", "tolerance": { "maxFailed": 1 },
+           "iterator": { "start": "work", "states": {
+               "work": { "type": "TASK", "task": "maybe", "retry": { "maxRetry": 0 },
+                         "input": { "id": "${item}" }, "end": true } } },
+           "next": "summary" },
+    "summary": { "type": "TRANSFORM",
+                 "output": { "ok": "${len(m.output.items)}", "failed": "${len(m.output.failed)}" },
+                 "next": "report" },
+    "report": { "type": "TASK", "task": "handle", "input": { "action": "BATCH_REPORTED" }, "end": true }
+  }
+}

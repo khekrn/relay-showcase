@@ -70,6 +70,14 @@ public class Tasks {
         }
     }
 
+    @Component("maybe")   // per-item batch task: fails deterministically for id == "bad"
+    static class Maybe implements RelayTask<ItemIn, ItemOut> {
+        public ItemOut run(ItemIn in, TaskContext c) {
+            if ("bad".equals(in.id())) throw new Boom("cannot process item " + in.id());
+            return new ItemOut(in.id(), true);
+        }
+    }
+
     @Component("plan")   // a Dynamic SUBGRAPH task: GENERATES a workflow at runtime (a Parallel of N steps)
     static class Plan implements RelayTask<PlanIn, Handled> {
         public Handled run(PlanIn in, TaskContext c) {

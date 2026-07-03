@@ -25,6 +25,8 @@ public final class Model {
     public record BoomIn(String who) {}
 
     public record JobIn(String name) {}
+    public record ItemIn(String id) {}
+    public record ItemOut(String id, boolean ok) {}
     public record JobOut(String name, String status) {}
 
     public record Amount(int amount) {}   // input to the Dynamic ROUTE classifier

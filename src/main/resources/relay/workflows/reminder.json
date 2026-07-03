@@ -1,0 +1,17 @@
+{
+  "name": "reminder",
+  "version": 1,
+  "mode": "ASYNC_STICKY",
+  "output": "${default(resolved.output, autoResolve.output)}",
+  "start": "shape",
+  "states": {
+    "shape": { "type": "TRANSFORM",
+               "output": { "who": "${input.name}", "score": "${avg(70, 80, 90)}" },
+               "next": "nap" },
+    "nap":   { "type": "SLEEP", "duration": 500, "next": "gate" },
+    "gate":  { "type": "AWAIT", "signal": "human", "timeout": 1500, "onTimeout": "autoResolve", "next": "resolved" },
+    "resolved":    { "type": "TASK", "task": "handle", "input": { "action": "HUMAN_RESOLVED" }, "end": true },
+    "autoResolve": { "type": "TASK", "task": "handle",
+                     "input": { "action": "AUTO_RESOLVED_AFTER_TIMEOUT" }, "end": true }
+  }
+}

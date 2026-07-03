@@ -159,6 +159,21 @@ public class ShowcaseApplication {
             }
             System.out.printf("   pulled wave-by-wave -> %s%n", djs);
 
+            section("19. GRAMMAR V2 — TRANSFORM -> SLEEP -> AWAIT onTimeout (reminder flow)");
+            var rem = relay.runAsync("reminder", Map.of("name", "dana"), Handled.class);
+            System.out.printf("   submitted -> %s (transform ran inline; now sleeping 500ms)%n", relay.status(rem.rootId()));
+            String rst = relay.status(rem.rootId());
+            for (int i = 0; i < 30 && !"COMPLETED".equals(rst) && !"FAILED".equals(rst); i++) {
+                Thread.sleep(400);                          // auto-poller drives the wake + the timeout route
+                rst = relay.status(rem.rootId());
+            }
+            System.out.printf("   slept -> awaited 'human' 1.5s -> nobody came -> onTimeout route -> %s%n", rst);
+
+            section("20. GRAMMAR V2 — MAP tolerance (batch with one bad item)");
+            @SuppressWarnings({"unchecked", "rawtypes"})
+            var batch2 = relay.runAsync("batchjob", Map.of("ids", java.util.List.of("a", "bad", "c", "d")), (Class<Map>) (Class) Map.class);
+            System.out.printf("   4 items (one always fails, maxFailed=1) -> %s : %s%n", batch2.status(), batch2.result());
+
             System.out.println("\n================  ALL SCENARIOS EXERCISED  ================\n");
         };
     }
